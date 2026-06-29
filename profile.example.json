@@ -1,0 +1,30 @@
+{
+  "_README": "Your voice/identity. The writer literally becomes you. Fill these in, then save as profile.json (or pass --profile path). Everything here shapes 'my thoughts'. Leave a field as null/empty to skip it.",
+
+  "name": "Your Name",
+  "role": "AI engineer / founder / researcher — what you do",
+  "bio": "One or two sentences on who you are and what you build. Used only for voice; the writer will NOT invent experiences beyond what you state here.",
+  "x_handle": "@yourhandle",
+  "linkedin_url": "https://www.linkedin.com/in/you",
+
+  "recurring_themes": [
+    "the topics you keep coming back to, e.g. 'agent reliability'",
+    "'cost/latency of inference'",
+    "'why most AI demos don't survive production'"
+  ],
+
+  "beliefs": [
+    "your actual opinionated takes — the writer will lean on these",
+    "e.g. 'eval is the real moat, not the model'",
+    "e.g. 'most 'autonomous' agents are just retries with extra steps'"
+  ],
+
+  "tone": ["dry", "specific", "skeptical-but-curious", "no-hype"],
+
+  "avoid": [
+    "🚀", "game-changer", "mind-blowing", "let that sink in",
+    "hashtag spam", "emoji bullets", "engagement-bait questions"
+  ],
+
+  "language": "English"
+}

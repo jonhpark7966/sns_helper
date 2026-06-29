@@ -1,0 +1,20 @@
+# generated runs
+out/
+.context/
+
+# media / transcripts that get downloaded
+*.mp3
+*.m4a
+*.wav
+*.webm
+*.opus
+*.srt
+*.vtt
+
+# python
+__pycache__/
+*.pyc
+.venv/
+
+# os
+.DS_Store
