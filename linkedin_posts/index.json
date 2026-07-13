@@ -1,0 +1,114 @@
+[
+  {
+    "urn": "urn:li:activity:7481234275174936576",
+    "profile": "jonhpark7966",
+    "date": "2026-07-10",
+    "permalink": "https://www.linkedin.com/feed/update/urn:li:activity:7481234275174936576/",
+    "actor": "Jong Hyun Park • 나",
+    "header": "",
+    "is_original": true,
+    "text": "저희가 ICML 참가하신 분들 뵙고 싶어서 작게 행사를 하나 열었습니다.\n우선 모두들 와주셔서 너무 감사합니다.\n유투브 운영 하는 데에 비용, 시간, 에너지 다 많이 쓰고 있는데, 이래서 유투브 하는 구나 싶습니다.\n시간이 모자라서 모든 분들과 이야기 나누지 못한 것이 아쉽네요.\n학회 기간이라 대학원생 분들이 많았고, 현업에 계신분들 (AI 관련 종사자, 교수님, 창업가, 의사 선생님 분들 까지) 다양하게 많이 와주셔서 대화 하는 것 자체가 재미있었습니다.\n\n인상적이었던 점이 하나 있습니다.\n사실 가벼운 마음으로 번개(요즘도 이런말 쓰나요) 처럼 마련한 자리인데, 생각보다 많은 분들이 신청 주셔서 네트워킹이 잘 될까 걱정을 살짝 했습니다.\n아무래도 저희가 특정 도메인을 깊게 다루다 보니, 방문 주신 분들이 AI 를 이미 다들 잘 아셔서 서로서로들 금방 이야기를 하시는 것 같았습니다. 특히 VLA 관련 연구하시는 분들이 많으셨어요.\n모델 아키텍쳐 연구하시는 분, 데이터 연구하시는 분, 새로운 모달리티 추가하시려는 분, 학습 방법 연구하시는 분 다양하게 있으니 서로서로 도움이 될 수 있지 않았나 싶습니다.\n저도 새로운 분들 많이 알고 교류하게 되어서 좋았습니다.\n\n그리고, 훈수를 받고자 최대한 여쭤보고 다녔습니다.\n저희 컨텐츠에 어떤 것들을 기대하고 계실까...\n공동 호스트인 저와 Junho Cho 는 고등학교 친구라서 의견 교환을 비교적 편하게 하는데, 티격태격 하는 모습이 좋다고 하시더라고요.\n저희가 쇼츠로 소식을 간결하고 빠르게 전달하는 컨텐츠도 시도했었는데, 여력이 안되어 멈춰있습니다. 다시 해달라는 의견도 들었습니다.\n다양한 의견들을 들었는데, 종합해서 많은 분들이 최대한 만족할 수 있는 방향으로 나아가보겠습니다.\n그나저나, 저희 채널을 봐주시는 분들이 이렇게나 된다는 것이 아직도 신기하긴 합니다.\n\n흔쾌히 행사 장소와 음료 마련해주신 ARK Point와 Goobong Jeong님 감사드립니다.\n특히, 카페 분위기를 위해 직접 생화 꾸며주신 Kyongeun Lee님, 마이크랑 빔화면 등 셋업 도와주신 Victor Jae Pyo Cho님.\n매끄러운 현장 운영 도와주신 Jiho Yang님 감사합니다.",
+    "images": [
+      "img1.jpg",
+      "img2.jpg",
+      "img3.jpg"
+    ],
+    "link_thumbnails": [],
+    "image_urls": [
+      "https://media.licdn.com/dms/image/v2/D5622AQHQcnMDT520wQ/feedshare-shrink_800/B56Z9Ku7bAHcAg-/0/1783665244729?e=1785369600&v=beta&t=gv7MkWs-tBsC9ow-wO27PGhaizyElYuNV7WbNIhXcOk",
+      "https://media.licdn.com/dms/image/v2/D5622AQGnKWXfvn5dwA/feedshare-shrink_800/B56Z9Ku6O3GQAg-/0/1783665239925?e=1785369600&v=beta&t=ovQPicYPsVUYwqxMXaOgkz_DD0IVWxA-BWnAbtMD9Hc",
+      "https://media.licdn.com/dms/image/v2/D5622AQGeUtHyOlf7AA/feedshare-shrink_800/B56Z9Ku6X1HYAc-/0/1783665240456?e=1785369600&v=beta&t=U0O5SCSIeWErEwBlkmMckxThYA_LVq8hinJdgRlrMYs"
+    ],
+    "thumb_urls": []
+  },
+  {
+    "urn": "urn:li:activity:7480446307682107392",
+    "profile": "jonhpark7966",
+    "date": "2026-07-08",
+    "permalink": "https://www.linkedin.com/feed/update/urn:li:activity:7480446307682107392/",
+    "actor": "Jong Hyun Park • 나",
+    "header": "",
+    "is_original": true,
+    "text": "Claude Code는 새 기능을 빠르면 하루 만에 내놓기도 한답니다. 근데 그걸 가능하게 하는 게 엔지니어링 속도만은 아니더라고요.\n\nClaude Code PM인 Cat Wu가 Lenny's Podcast에서 한 이야기를 이번 에피소드에서 같이 살펴봤습니다. 구현 비용이 많이 떨어진 지금, PM의 일은 로드맵 짜고 일정 관리하는 게 아니라 아이디어가 유저한테 닿기까지의 모든 장애물을 치우는 것이 라고 합니다. 엔지니어가 기능을 올리면 바로 다음 날 마케팅이 나갈 수 있게요.\n\nY Combinator 채널에서도 조직과 역할의 변화를 증기기관 시절의 이야기로 비유하여 설명했습니다. 공장에서 증기기관만 빼고 전기모터를 끼워 넣었을 땐 생산성이 별로 안 올랐고, 모터를 전제로 공장을 재설계하고 나서야 본격적으로 올랐다고 하죠. 지금 조직에서 주니어 자리에 AI 에이전트를 끼워 넣는 건 딱 그 단계인 것 같습니다. 기존의 PM 의 역할에서 일만 AI로 대체하는 것이 아니라, Claude Code 팀 처럼 하는 일 자체가 바뀌어야한다는 것이겠죠.\n\n문제는 그 정답에 가까운 플레이북이 아직 정립이 되지는 않은 것 같아요. OpenAI든 Anthropic이든 요즘 잘되는 회사들이 다 '없던 데서 새로 나온' 회사라는 게 힌트가 아닐까 싶기도 합니다. (저희도 sudoremove 운영 워크플로우를 통째로 빠개서 자동화해 보는 중입니다. 잘 될지는 지켜봐 주세요.)\n\n이번 sudoremove 에피소드에서 Cat Wu와 Boris Cherny가 비전과 오퍼레이션을 실제로 어떻게 나누는지, AI 네이티브 조직이 대체 뭔지 한참 떠들었습니다. 편하게 들어보시면 좋겠습니다\n\n참고로 다음 편도 AI Native 에 대해서 조금 더 고민한 내용이 올라올 예정입니다.\n\nhttps://lnkd.in/g4kmns8K\n\nwith JC (Junho Cho) at sudoremove\n\n\n해시태그\n#AINative",
+    "images": [],
+    "link_thumbnails": [
+      "linkthumb1.jpg"
+    ],
+    "image_urls": [],
+    "thumb_urls": [
+      "https://media.licdn.com/dms/image/sync/v2/D5627AQH2nh9JbcrXTw/articleshare-shrink_160/B56Z8_h0mWGcAQ-/0/1783477260169?e=1784523600&v=beta&t=b64MPgcEcagtZDwsEbPyDH57pbOwXigUC8JwJP7pcQ8"
+    ]
+  },
+  {
+    "urn": "urn:li:activity:7479683637882302464",
+    "profile": "jonhpark7966",
+    "date": "2026-07-05",
+    "permalink": "https://www.linkedin.com/feed/update/urn:li:activity:7479683637882302464/",
+    "actor": "Jong Hyun Park • 나",
+    "header": "",
+    "is_original": true,
+    "text": "☕ ICML 2026 서울, sudoremove가 오픈 커피챗을 엽니다.\n\n올해 ICML이 코엑스에서 열리는 김에, 저희도 참석하니 참가자 분들 뵙는 자리를 준비했어요.\n\n 🗓️ ICML 기간 중, 7/9 목요일 2시 \n📍 강남·코엑스 인근. 시간·장소는 인원 보고 확정해 등록자에게 안내\n\n놀러오세요\n\n👉 https://luma.com/2a6sohsz",
+    "images": [],
+    "link_thumbnails": [
+      "linkthumb1.jpg"
+    ],
+    "image_urls": [],
+    "thumb_urls": [
+      "https://media.licdn.com/dms/image/sync/v2/D5627AQFdVTU3cXj8kA/articleshare-shrink_160/B56Z80sjcOIgAQ-/0/1783295523555?e=1784523600&v=beta&t=pNRDOKPzpxnbyI0n0I7t4RM9e0dZy3e16q2Zik29LTA"
+    ]
+  },
+  {
+    "urn": "urn:li:activity:7477283605980020736",
+    "profile": "jonhpark7966",
+    "date": "2026-06-29",
+    "permalink": "https://www.linkedin.com/feed/update/urn:li:activity:7477283605980020736/",
+    "actor": "Jong Hyun Park • 나",
+    "header": "",
+    "is_original": true,
+    "text": "누구나 쉽게 제품을 만드는 시대, 해자는 코드가 아니라 신뢰라는 이야기\n\n전 토스, 오늘의 집 PO 였고, 지금은 From September 를 창업한 Tae Hwan 를 모셨습니다.\n\n좋은 제품을 만드는 방법, 특히 AI 시대에 좋은 제품을 만드는 방법에 대해 들어봤습니다.\n\n빌딩의 비용은 저렴해지고 있습니다. 과장 조금만 보태면 딸깍 한번에 그럴 듯한 소프트웨어 제품이 만들어지죠. (물론 완벽하지 않습니다.)\n\n가장 주목을 받는 제품들인 Codex, Claude Code, Cursor, 이런 제품들은 거의 매일 기능이 출시됩니다. 그런데 이들 중에 뭐가 객관적으로 더 우월한지 딱 잘라 말하기는 어렵습니다. 제품의 우월함 그 자체를 해자로 보기는 어려운 것이죠.\n\n그럼 사람들은 뭘 보고 고를까요. 코딩 벤치마크 점수가 아니라 그 회사가 대외적으로 꾸준히 쌓아온 철학을 보는 것 같습니다.\n\nAnthropic은 Mythos를 내면서 \"잘 만들었지만 위험해서 우리 원칙대로 안전장치부터 깐다\"고 했습니다. 써보지도 않았는데 철학에 혹 하기도 합니다. 같은 말을 다른 회사가 했으면 안 믿었을 확률이 높겠죠. (물론 저를 포함해서 의심의 눈초리를 보내는 사람도 많습니다.)\n\n브랜딩은 덧셈이 아니라 곱셈입니다. 리텐션 안 나오는 제품에 서사만 입히면 간판만 바꾼 망한 카페에요. 결국 프로덕션에서 살아남는 게 먼저고, 그 위에 \"왜 만들었나\"가 곱해질 때 해자가 될 것 입니다.\n\n만든 제품 그 자체보다 누가 만들었나가 중요해진다는 명제, 엔지니어일수록 불편하지만 외면하기 어렵네요.\n\n\n보다 자세한 내용은 아래 유투브 영상에 있으니 봐주시면 매우 감사합니다, 우리 게스트가 드립을 열심히 쳐서 재미있습니다.  (with Junho Cho)\n\nhttps://lnkd.in/gQpxVZap",
+    "images": [],
+    "link_thumbnails": [
+      "linkthumb1.jpg"
+    ],
+    "image_urls": [],
+    "thumb_urls": [
+      "https://media.licdn.com/dms/image/sync/v2/D5627AQFKYRxL_uxI6A/articleshare-shrink_160/B56Z8SgI1SLAAQ-/0/1782721843654?e=1784523600&v=beta&t=wLPqxQEWFxc36IoLF_FVwpkIg1AMliGUL17QvxkbSO8"
+    ]
+  },
+  {
+    "urn": "urn:li:activity:7474336977958432768",
+    "profile": "jonhpark7966",
+    "date": "2026-06-21",
+    "permalink": "https://www.linkedin.com/feed/update/urn:li:activity:7474336977958432768/",
+    "actor": "Jong Hyun Park • 나",
+    "header": "",
+    "is_original": true,
+    "text": "어떤 손이 좋은 손일까요\n \nhttps://lnkd.in/gFqvMc2A\n\nDexterous 핸드(로봇 손) 10종 이상을 실제로 운용해 본 엔지니어는 아마 몇 명 없을 것 같아요. 이번에 RLWRLD 의 하드웨어 엔지니어 Max Chang Hwan Kim 님을 초청해서 배우는 시간을 가졌습니다.\n \n휴머노이드의 범주에 있는 데모들을 보면, 6 자유도의 핸드 (ex. 인스파이어 핸드, 사실상 주먹 쥐고 펴는 것 밖에 못함 ㅠㅠ) 를 이용해서 pick and place 를 하는 경우가 꽤 많습니다.\n \n산업의 적용 가능성을 생각해보면, 얇은 물체도 못 집고 많은 도구들도 쥘 수 없습니다. 모양만 손에 가까운 기구라고 볼 수도 있죠.\n 그렇다면, 어떤 조건을 갖춰야 사람 손처럼 마우스도 다루고, 망치도 두들기고, 물총도 쏠 수 있을까요?\n \n좋은 핸드를 가르는 핵심 기준 크게 다음과 같습니다.\n \n \n - 자유도(DOF): 최소 12~13, 권장 15 이상. 6자유도 핸드는 사실상 'pick & place 시연용'에 가깝습니다.\n - 핑거팁 포스: 병뚜껑을 따려면 15~20N은 필요. 사람은 30~50N 수준.\n - 센싱: 포스/텍타일 센싱과 '힘 투명성(force transparency)', 역구동성(backdrivability)이 안정적 파지를 결정합니다.\n - 그 외 다양한 각도로 엄지와 다른 손가락들이 만날 수 있어야하고, 접촉면이 넓어야하고, 내구성도 좋아야하고 여러 요소들이 있습니다.\n - 사람 손은 모두 충족하고 있는 요소들입니다.\n \n이 기준에 꽤나 가까운 로봇인 Sharpa Wave 핸드는 이번에 Nvidia 의 Reference Humanoid Robot 에 채택되기도 했죠. 그런데 가격이 무려 $50,000 ... 크흠 \n \n이번에 공개한 https://lnkd.in/g-Bk9Fs7 에 가시면 다양한 핸드에 대한 비교표를 보실 수 있습니다. 아직 완벽한 핸드는 없습니다. 물리 법칙(소형 모터의 출력·발열 한계)이 발목을 잡기 때문에 갑자기 완벽한 핸드가 쏟아져 나오진 않을 것입니다. 다만 자본이 유입되며 상향 평준화는 분명히 진행 중인 것으로 보입니다. 근 1년동안만 해도 수 많은 핸드들이 출시 되었습니다.\n \n여기까지는 손목형 (direct drive) 핸드에 대해서만 다뤘는데, 전완부형(tendon drive) 핸드는 추가 예정이시라고 합니다, 다음에 또 한번 모셔야겠습니다.\n \n자세한 내용은 아래 유투브 영상을 참조해주세요! (with Junho Cho)",
+    "images": [],
+    "link_thumbnails": [
+      "linkthumb1.jpg"
+    ],
+    "image_urls": [],
+    "thumb_urls": [
+      "https://media.licdn.com/dms/image/sync/v2/D5627AQEMhKEVRIwi3A/articleshare-shrink_160/B56Z7oteypGcAQ-/0/1782020698798?e=1784523600&v=beta&t=-cjkjmU_tyF9j1g_OMQ3e2crDsAMs3Tv5GC6aU_FWcw"
+    ]
+  },
+  {
+    "urn": "urn:li:activity:7470973178350063616",
+    "profile": "jonhpark7966",
+    "date": "2026-06-11",
+    "permalink": "https://www.linkedin.com/feed/update/urn:li:activity:7470973178350063616/",
+    "actor": "Jong Hyun Park • 나",
+    "header": "",
+    "is_original": true,
+    "text": "Hugging Face 본사에 가서 구경하고 인터뷰도 하고 왔는데요,\n가장 인상적인 점은 구성원들이 모두 행복해보인다는 점 이었습니다.\n저도 그런 조직을 만들고 운영하고 싶다는 생각이 들었습니다.\n\n유투브를 하다보니 HF 본사도 놀러가게 되고 참 신기하네요.\n저는 대외적으로 유투브를 운영하고 있지만, AI 컨설팅 사업을 아주 작게 하고 있습니다. 3년 정도 된 것 같네요.\n\n올해는 아마도 B2B 뿐 아니라 모든 분들에게 도움이 될만한 프로젝트도 진행하고, 같이 일할 수 있는 팀원분들을 모실 예정입니다.\n링크드인 활동도 시작해야지 해야지 생각만 하고 미루고 있다가 이제서야 첫 글을 씁니다.\n앞으로 최대한 자주 활동을 해보겠습니다.\n\nhttps://lnkd.in/gzyH5DcP",
+    "images": [],
+    "link_thumbnails": [
+      "linkthumb1.jpg"
+    ],
+    "image_urls": [],
+    "thumb_urls": [
+      "https://media.licdn.com/dms/image/sync/v2/D5627AQFmYQdEqU3luQ/articleshare-shrink_160/B56Z638VKxJoAQ-/0/1781202508087?e=1784523600&v=beta&t=Od_BdKtPRHHwWjHinEJfBcGfZzvIVWMn6pcsqNNPd7w"
+    ]
+  }
+]
