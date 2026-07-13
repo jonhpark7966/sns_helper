@@ -1,5 +1,29 @@
 [
   {
+    "urn": "urn:li:activity:7482320413042139136",
+    "profile": "jonhpark7966",
+    "date": "2026-07-13",
+    "permalink": "https://www.linkedin.com/feed/update/urn:li:activity:7482320413042139136/",
+    "actor": "Jong Hyun Park • 나",
+    "header": "",
+    "is_original": true,
+    "text": "vooy(부이) 팀이 해시드 라운지에서 연 Creator Recipe Day에 다녀왔습니다.\n현장에 가자마자 놀란 부분이 있습니다.\n저 같은 안경잡이 외모의 AI 좋아하시는 분들이 오는 자리인 줄 알았는데요\n갑자기 그림체가 다른 미모의 여성분들이 잔뜩 오셔서 이게 뭐지...? 싶었습니다.\n인스타 기반의 인플루언서 분들 많이 계시고, PD 분들도 계셨고, 래퍼이자 작곡가 화지님도 계셨고, 아무튼 평소에 마주하기 어려운 다른 분야에 계신 분들을 만날 수 있어서 재미있었습니다.\n신기한 것은 이런 인플루언서 분들께서 다들 AI 를 잘 사용하시더라고요. 저야 본업이니까 당연히 AI 에 익숙해야하는 것이지만, 전혀 다른 분야의 분들도 잘 사용하시는 것이 매우 신기했습니다.\n\nvooy는 ‘해줘’ 하면 해주는 AI 에이전트인데, 여기에 제가 직접 만든 MCP 서버를 붙여서 영상 컷 편집을 자동으로 해주는 에이전트를 만들었습니다. 현장에서 짧게 인터뷰를 진행하고, 그 촬영본을 컷 편집하는 데모를 했어요.\n아주 감사하게도 3등 해서 파인다이닝 20만원권 탔습니다. 예약도 해주신다고 하시더라고요.\n흔쾌히 인터뷰 촬영 해주신 민웅기 님 감사합니다.\n\nvooy가 MCP 로 외부 서비스 연결을 지원하는데 제 개인 서버에서 돌고 있는 서비스 API 는 현재 저만 쓰는 것이다 보니 MCP 안 만들어둔 상태였습니다. 그래서, MCP 서버 만드는 작업에 대부분의 시간을 사용했고요, 연결이 성공적으로 잘 되어서 데모를 진행할 수 있었습니다. 근 미래에는 서비스를 출시할 때, web ui 나 app 없이 그냥 MCP 만 내놓을 수도 있나? 라는 생각이 들었습니다. 미드저니가 디스코드로 서비스를 했던 것이 떠오르네요.\n\n다들 궁금하실 것 같아 1, 2등 하신 분들의 작품을 간략하게만 소개드리면,\n - 인플루언서가 협찬을 받고 싶을 때 콜드메일을 보내주는 에이전트를 만들고 실제로 자동화해서 보내셨습니다. 실제로 답변도 왔는데, 거절 답변이었습니다ㅋㅋㅋ\n - 필요에 맞게 적절한 인플루언서들을 찾아주고 연락해주는 에이전트를 만드셨습니다. 브랜드가 마케팅을 하기 위해 사용할 수도 있고, 플러팅을 하는데 사용할 수도 있다고 설명해주셨습니다. 라이브 데모를 하면서 실제 연락까지 하셨습니다ㅋㅋㅋ\n정말 쓸모 있고, 현장에서 직접 실행을 보여주신 것이 인상깊었고, 다들 비슷하게 생각하셔서 수상을 하실 수 있었던 것 같습니다.\n\n좋은 자리 만들어주신 vooy 팀 (Donghyun Kim, vooy, Hashed) 감사합니다. 한국에서도 이런 자리가 더 많아지면 좋겠습니다.",
+    "images": [
+      "img1.jpg",
+      "img2.jpg",
+      "img3.jpg",
+      "img4.jpg"
+    ],
+    "link_thumbnails": [],
+    "image_urls": [
+      "https://media.licdn.com/dms/image/v2/D5622AQGCOvPfZHmpgQ/feedshare-shrink_800/B56Z9aCHvcG0Ac-/0/1783921933898?e=1785369600&v=beta&t=kOsP86FOHMmr6QZI3AJzKHrtpPV3k2WrLpcPJGuEBJo",
+      "https://media.licdn.com/dms/image/v2/D5622AQFwYs4hE4W6uQ/feedshare-shrink_800/B56Z9aCHxsGsAc-/0/1783921934142?e=1785369600&v=beta&t=34yd7BSV7QQQ0Wq4MCy3GLuMFMxqnauYvI3SPXHrhjE",
+      "https://media.licdn.com/dms/image/v2/D5622AQGBLC6oS6FcvQ/feedshare-shrink_800/B56Z9aCHy7GsAc-/0/1783921934291?e=1785369600&v=beta&t=EjiLnse345qbf8pPKce4phS6VcKRh2Cuc-oeM7NYtds",
+      "https://media.licdn.com/dms/image/v2/D5622AQHOdVzZ5CvUSA/feedshare-shrink_800/B56Z9aCHvSH4Ac-/0/1783921934103?e=1785369600&v=beta&t=z-tc-eRrUjHPrnyXs6xodK7_7vuq4Ik5ZApcBAQjYIc"
+    ],
+    "thumb_urls": []
+  },
+  {
     "urn": "urn:li:activity:7481234275174936576",
     "profile": "jonhpark7966",
     "date": "2026-07-10",
