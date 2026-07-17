@@ -7,7 +7,7 @@ Built for tech / AI / LLM / robotics content. Works on **your** videos or **anyo
 
 ```
 youtube url  ──▶  metadata (yt-dlp)
-             ──▶  transcript (captions ▸ Whisper ▸ ElevenLabs)
+             ──▶  transcript (original-language captions ▸ English ▸ Whisper ▸ ElevenLabs)
              ──▶  agent writer (claude -p  |  codex exec)
              ──▶  x_post.txt + linkedin_post.txt
 ```
@@ -55,8 +55,10 @@ Edit **`profile.json`** so the posts sound like you. This is what powers "your t
 ```
 
 Extra fields the writer also reads: `take_guidance` (tells it to form a fresh opinion each
-video instead of recycling `beliefs`), `audience` (tunes jargon level), and `format_prefs`
-(e.g. "X: single punchy tweet; LinkedIn: short and sharp").
+video instead of recycling `beliefs`), `audience` (tunes jargon level), `format_prefs`
+(e.g. "X: single punchy tweet; LinkedIn: short and sharp"), `own_channels` (host-POV
+detection for your own videos), and `cohosts` (credited with a "with … at <channel>" line
+on own-video posts).
 
 See `profile.example.json` for the full field guide. The writer will **never invent
 biography** beyond what's here — `beliefs`/`themes` shape opinions, nothing fabricates a résumé.
@@ -89,21 +91,56 @@ python3 sns_helper.py "<url>" --transcript-file my_notes.txt   # skip fetching e
 
 # a different voice / longer transcript window
 python3 sns_helper.py "<url>" --profile ./voices/spicy.json --max-transcript-words 16000
+
+# weave in a host note the video can't tell us (e.g. next-episode teaser)
+python3 sns_helper.py "<url>" --note "다음 편도 AI Native 얘기가 올라올 예정입니다."
+
+# audience signal from the comments; per-video co-host credit
+python3 sns_helper.py "<url>" --comments 50 --cohosts "JB, JC"
 ```
 
 ### Transcript sources (`--transcriber`)
 
 | value | behavior |
 |-------|----------|
-| `auto` *(default)* | manual captions → auto captions → Whisper fallback |
-| `subs` | captions only (manual then auto); error if none |
+| `auto` *(default)* | captions → Whisper fallback |
+| `subs` | captions only; error if none |
 | `whisper` | always local Whisper (`turbo`) on the downloaded audio |
 | `elevenlabs` | always ElevenLabs Scribe API (`ELEVENLABS_API_KEY` required) |
+
+**Captions are fetched in the video's *original source language first*, then English, then
+Whisper.** The source language is auto-detected from the video's metadata (`--language ko`
+to override). For a Korean video you get the real Korean transcript (`ko-orig` = YouTube's
+original ASR track), not a machine-translated English caption — then the writer produces your
+EN/KO posts from it. Transcript text is de-duplicated and stripped to clean prose.
 
 > For *writing posts*, auto-captions are perfectly fine and fast/free — Whisper/ElevenLabs
 > are the fallback for videos with no captions at all.
 
 ---
+
+## Interview mode — write more like *you* (`--interview`)
+
+The title, transcript, description, and comments can't tell the tool the things that make a post
+yours: the scene you walked into, your real reaction, which moment stuck, who to tag (by their
+LinkedIn names, not the transcript's), who to thank, what you built. So instead of smoothing those
+gaps into generic prose (or inventing them), it **asks you**.
+
+```bash
+# phase 1 — writes out/<id>/interview.md with questions tailored to THIS video
+python3 sns_helper.py "<url>" --only linkedin --lang ko --interview
+
+# ...fill in the answers under each question (leave unknowns blank), then re-run the same command:
+python3 sns_helper.py "<url>" --only linkedin --lang ko --interview
+# (or pass answers directly: --answers-file path/to/answers.md)
+```
+
+Your answers become the **authoritative backbone** of the post (weighted above the transcript).
+Anything still unknown is left as a visible `[TODO: ...]` for you to fill — the writer never
+fabricates a name, number, or detail to paper over a gap.
+
+The tool also matches your voice from your **real published posts** in `voice/linkedin_ko.md`
+(refresh it by pasting in newer posts).
 
 ## Output
 

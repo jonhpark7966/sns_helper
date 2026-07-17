@@ -152,30 +152,32 @@ def subtitle_to_text(path: Path) -> str:
     return text.strip()
 
 
-def _find_sub(out_dir: Path, video_id: str) -> Path | None:
-    for ext in ("srt", "vtt"):
-        matches = sorted(out_dir.glob(f"{video_id}*.en*.{ext}")) or \
-                  sorted(out_dir.glob(f"{video_id}*.{ext}"))
-        if matches:
-            return matches[0]
+def _find_sub(out_dir: Path, video_id: str, prefixes: list[str]) -> Path | None:
+    """Find a downloaded subtitle file, trying language prefixes in priority order."""
+    for pref in prefixes:
+        for ext in ("srt", "vtt"):
+            matches = sorted(out_dir.glob(f"{video_id}.{pref}*.{ext}"))
+            if matches:
+                return matches[0]
     return None
 
 
-def try_captions(url: str, out_dir: Path, video_id: str, auto: bool) -> str | None:
+def try_captions(url: str, out_dir: Path, video_id: str, sub_langs: list[str],
+                 match_prefixes: list[str], auto: bool) -> str | None:
     require_exe("yt-dlp")
     kind = "auto" if auto else "manual"
-    log(f"trying {kind} English captions ...")
+    log(f"trying {kind} captions [{','.join(sub_langs)}] ...")
     flag = "--write-auto-subs" if auto else "--write-subs"
     template = str(out_dir / f"{video_id}.%(ext)s")
     cmd = [
         "yt-dlp", "--no-playlist", "--skip-download", flag,
-        "--sub-lang", "en.*,en",
+        "--sub-lang", ",".join(sub_langs),
         "--sub-format", "vtt/srt/best",
         "--convert-subs", "srt",
         "-o", template, url,
     ]
     run(cmd, capture=True, check=False)
-    sub = _find_sub(out_dir, video_id)
+    sub = _find_sub(out_dir, video_id, match_prefixes)
     if not sub:
         return None
     text = subtitle_to_text(sub)
@@ -183,6 +185,23 @@ def try_captions(url: str, out_dir: Path, video_id: str, auto: bool) -> str | No
         return None
     log(f"got {kind} captions ({len(text.split())} words) from {sub.name}")
     return text
+
+
+def _caption_plan(src: str | None) -> list[tuple[str, bool, list[str], list[str]]]:
+    """Ordered caption attempts: (label, is_auto, sub_langs, match_prefixes).
+
+    Prefers the video's ORIGINAL source language over English. `<lang>-orig` is
+    YouTube's original ASR track (not a machine translation). English is only
+    attempted when the source is English or unknown.
+    """
+    plan: list[tuple[str, bool, list[str], list[str]]] = []
+    if src and src != "en":
+        plan.append((f"manual:{src}", False, [src, f"{src}.*"], [src]))
+        plan.append((f"auto:{src}", True, [f"{src}-orig", src], [f"{src}-orig", src]))
+    if src == "en" or not src:
+        plan.append(("manual:en", False, ["en", "en.*"], ["en"]))
+        plan.append(("auto:en", True, ["en-orig", "en"], ["en-orig", "en"]))
+    return plan
 
 
 def download_audio(url: str, out_dir: Path, video_id: str) -> Path:
@@ -262,10 +281,17 @@ def try_elevenlabs(url: str, out_dir: Path, video_id: str) -> str | None:
     return text
 
 
+def detect_source_lang(meta: dict, override: str | None) -> str | None:
+    """The video's original language (ISO base code), for caption selection."""
+    raw = override or (meta.get("language") if meta else None) or ""
+    return raw.split("-")[0].strip().lower() or None
+
+
 def get_transcript(url: str, out_dir: Path, video_id: str, transcriber: str,
                    whisper_model: str, language: str | None,
-                   transcript_file: str | None) -> tuple[str, str]:
-    """Returns (transcript_text, source_label)."""
+                   transcript_file: str | None, meta: dict) -> tuple[str, str]:
+    """Returns (transcript_text, source_label). Captions are fetched in the
+    video's ORIGINAL source language first, then English, then Whisper."""
     if transcript_file:
         p = Path(transcript_file).expanduser()
         if not p.exists():
@@ -275,34 +301,171 @@ def get_transcript(url: str, out_dir: Path, video_id: str, transcriber: str,
             txt = subtitle_to_text(p)
         return txt.strip(), f"file:{p.name}"
 
+    src = detect_source_lang(meta, language)
+    log(f"source language: {src or 'unknown'}")
+
     if transcriber == "elevenlabs":
         return try_elevenlabs(url, out_dir, video_id) or "", "elevenlabs"
     if transcriber == "whisper":
-        return try_whisper(url, out_dir, video_id, whisper_model, language) or "", "whisper"
-    if transcriber == "subs":
-        t = try_captions(url, out_dir, video_id, auto=False) or \
-            try_captions(url, out_dir, video_id, auto=True)
-        if not t:
-            die("No captions available for this video (try --transcriber whisper).")
-        return t, "captions"
+        return (try_whisper(url, out_dir, video_id, whisper_model, src) or "",
+                f"whisper({src or 'auto'})")
 
-    # auto: manual captions -> auto captions -> whisper
-    t = try_captions(url, out_dir, video_id, auto=False)
-    if t:
-        return t, "captions(manual)"
-    t = try_captions(url, out_dir, video_id, auto=True)
-    if t:
-        return t, "captions(auto)"
-    log("no captions; falling back to Whisper")
-    t = try_whisper(url, out_dir, video_id, whisper_model, language)
+    # captions: original source language first, then English, in priority order
+    for label, auto, sub_langs, prefixes in _caption_plan(src):
+        t = try_captions(url, out_dir, video_id, sub_langs, prefixes, auto)
+        if t:
+            return t, f"captions:{label}"
+
+    if transcriber == "subs":
+        die(f"No captions available (source={src or 'unknown'}); "
+            "try --transcriber whisper.")
+
+    log("no captions found; falling back to Whisper")
+    t = try_whisper(url, out_dir, video_id, whisper_model, src)
     if not t:
         die("Could not obtain a transcript by any method.")
-    return t, "whisper"
+    return t, f"whisper({src or 'auto'})"
 
 
 # --------------------------------------------------------------------------- #
 # 3. generation
 # --------------------------------------------------------------------------- #
+def fetch_comments(url: str, out_dir: Path, max_comments: int) -> list[dict]:
+    """Fetch top comments (cached). Returns [{text, likes}], sorted by likes."""
+    cache = out_dir / "comments.json"
+    if cache.exists():
+        try:
+            return json.loads(cache.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    require_exe("yt-dlp")
+    log(f"fetching up to {max_comments} top comments ...")
+    out = run(
+        ["yt-dlp", "-J", "--write-comments", "--no-warnings", "--skip-download",
+         "--extractor-args",
+         f"youtube:max_comments={max_comments},all,0;comment_sort=top", url],
+        capture=True, check=False)
+    try:
+        meta = json.loads(out.strip().splitlines()[-1])
+    except Exception:
+        log("could not fetch comments (skipping)")
+        return []
+    simplified = [
+        {"text": " ".join((c.get("text") or "").split()), "likes": c.get("like_count") or 0}
+        for c in (meta.get("comments") or []) if (c.get("text") or "").strip()
+    ]
+    simplified.sort(key=lambda c: c["likes"], reverse=True)
+    cache.write_text(json.dumps(simplified, ensure_ascii=False, indent=2), encoding="utf-8")
+    log(f"got {len(simplified)} comments")
+    return simplified
+
+
+def comments_directive(comments: list[dict], n: int = 12) -> str:
+    if not comments:
+        return ""
+    lines = "\n".join(f"- ({c['likes']}♥) {c['text'][:200]}" for c in comments[:n])
+    return (
+        "\n\n# TOP VIEWER COMMENTS (audience signal — context only)\n"
+        "These are top comments on the video. Use them ONLY to sense what resonated or what "
+        "viewers care about, and let that lightly inform your emphasis. Do NOT quote them, "
+        "attribute them, treat them as facts, or address commenters. Ignore links/spam.\n" + lines)
+
+
+def load_voice_samples() -> str:
+    f = HERE / "voice" / "linkedin_ko.md"
+    return f.read_text(encoding="utf-8") if f.exists() else ""
+
+
+def voice_directive(platform: str, lang: str) -> str:
+    """Inject the poster's REAL posts as a voice reference (KO LinkedIn = strongest signal)."""
+    if platform != "linkedin" or lang != "ko":
+        return ""
+    samples = load_voice_samples()
+    if not samples:
+        return ""
+    return (
+        "\n\n# HOW YOU ACTUALLY WRITE — voice reference (match rhythm, NOT content)\n"
+        "Below are REAL posts you published. Match their register, humor (ㅋㅋㅋ ok), how they "
+        "OPEN (a concrete/funny/self-deprecating scene or spoken reaction — not a summary), how "
+        "they name+tag real people, the honest build-log, and the plain close. Do NOT reuse their "
+        "topic or sentences — only the voice.\n\n" + samples)
+
+
+def generate_questions(summ: dict, transcript: str, comments: list[dict], own: bool,
+                       agent: str, model: str | None, out_dir: Path,
+                       qlang: str, profile: dict) -> str:
+    name = profile.get("name") or "the poster"
+    ctext = "\n".join(f"- {c['text'][:160]}" for c in comments[:8]) or "(none)"
+    ask_lang = "Korean" if qlang == "ko" else "English"
+    task = (
+        f"You are helping {name} write a social post about a video, in their voice. Before "
+        "writing, generate a SHORT list of questions to ask THEM — only about things the title, "
+        "description, transcript, and comments CANNOT tell you, but that would make the post "
+        "specific and true.\n\n"
+        "Focus your questions on:\n"
+        "- The OPENING SCENE / their real reaction (recaps live or die on this): what surprised "
+        "them, a funny/self-deprecating moment, why they went.\n"
+        "- PEOPLE to tag and EXACTLY how each name should appear (LinkedIn tags are romanized real "
+        "names, not the transcript's Korean names) — guest(s), interviewees, and the organizer to "
+        "thank.\n"
+        "- The single MOMENT or idea that mattered most to them personally.\n"
+        "- Anything THEY built/demoed (the honest build-log: what was actually hard).\n"
+        "- OTHER people's builds/work worth crediting generously.\n"
+        "- The exact CREDIT / closing line and co-host(s) for THIS post.\n"
+        "- Any likely-mis-transcribed name/number/product to correct (auto-captions are messy).\n\n"
+        "Rules: 4-8 questions max, each grounded in THIS video's actual content (name the people/"
+        f"segments you saw), each answerable in one line, written in {ask_lang}. Output ONLY a "
+        "numbered list of questions, nothing else.\n\n"
+        "VIDEO\n"
+        f"Title: {summ['title']}\n"
+        f"Channel: {summ['channel']}  (this is the poster's own video: {'yes' if own else 'no'})\n"
+        f"Description:\n{(summ['description'] or '')[:1500]}\n\n"
+        f"Transcript (messy auto-captions possible):\n{cap_words(transcript, 3000)}\n\n"
+        f"Top comments:\n{ctext}\n"
+    )
+    return generate_post("interview", "You write sharp, specific, non-generic interview questions.",
+                         task, agent, model, out_dir).strip()
+
+
+def write_interview_file(path: Path, questions_text: str, url: str) -> None:
+    qs = [q.strip() for q in re.split(r"(?m)^\s*\d+[.)]\s*", questions_text) if q.strip()]
+    lines = [
+        "# 인터뷰 — 각 질문 아래 '> ' 다음에 답을 적고, 같은 명령을 다시 실행하세요.",
+        f'#   python3 sns_helper.py "{url}" --interview ...(같은 옵션)',
+        "# 빈 답은 무시됩니다. 모르면 비워두세요 — 지어내지 않고 [TODO]로 남깁니다.",
+        "",
+    ]
+    for i, q in enumerate(qs, 1):
+        lines += [f"## Q{i}. {q}", "> ", ""]
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def parse_answers(path: Path) -> list[tuple[str, str]]:
+    text = path.read_text(encoding="utf-8")
+    qa: list[tuple[str, str]] = []
+    for block in re.split(r"(?m)^##\s*Q\d+\.\s*", text)[1:]:
+        blines = block.splitlines()
+        q = blines[0].strip() if blines else ""
+        ans = [ln.strip()[1:].strip() for ln in blines[1:]
+               if ln.strip().startswith(">") and ln.strip()[1:].strip()]
+        qa.append((q, " ".join(ans).strip()))
+    return qa
+
+
+def host_input_directive(qa: list[tuple[str, str]]) -> str:
+    filled = [(q, a) for q, a in qa if a.strip()]
+    if not filled:
+        return ""
+    body = "\n".join(f"- {q}\n  → {a}" for q, a in filled)
+    return (
+        "\n\n# HOST INPUT — the poster's own answers (AUTHORITATIVE)\n"
+        "The poster answered these about their real experience. Treat this as the BACKBONE of the "
+        "post — more authoritative than the transcript. Use their scene, their names (spell/tag "
+        "EXACTLY as given), and their details faithfully; never override or contradict them. For "
+        "anything still unknown that would strengthen the post, write [TODO: ...] rather than "
+        "inventing it.\n" + body)
+
+
 def load_profile(path: str | None) -> dict:
     candidates = [path] if path else []
     candidates += [str(HERE / "profile.json"), str(HERE / "profile.example.json")]
@@ -422,7 +585,13 @@ def lang_directive(lang: str, platform: str) -> str:
             "TEXTURE: keep a clear opinion, but soften absolutes with light hedges where it reads "
             "naturally (\"~인 것 같습니다\", \"~겠죠\", \"~기도 합니다\"). A short parenthetical aside or a "
             "little self-deprecation about your own take is welcome (e.g. \"(물론 완벽하진 않습니다.)\"). "
-            "Stay no-hype.")
+            "Stay no-hype.\n"
+            "ATTRIBUTION: report the video's/guest's claims with reportative endings (~라고 합니다, "
+            "~한답니다, ~라고 하더라고요); keep plain assertions and ~인 것 같아요/~겠죠 for YOUR own "
+            "take, so readers can tell which is which. Avoid absolute intensifiers (바닥까지, 아무도, "
+            "전부, 절대, 무조건) unless the video literally says so. Describe the episode's content "
+            "with calm verbs (살펴봤습니다, 이야기했습니다) — save playful slang for parenthetical asides "
+            "about yourself. No dramatic setup lines like \"핵심은 이거였습니다\" — just say the thing.")
         if platform == "x":
             base += ("\nThis is X: keep it to one tight breath — compressed and tweet-like even in "
                      "존댓말.")
@@ -447,6 +616,14 @@ def is_own_video(summ: dict, profile: dict) -> bool:
 def ownership_directive(summ: dict, profile: dict) -> str:
     chan = summ.get("channel") or "this channel"
     if is_own_video(summ, profile):
+        cohosts = [str(c) for c in (profile.get("cohosts") or []) if str(c).strip()]
+        cohost_rule = ""
+        if cohosts:
+            names = ", ".join(cohosts)
+            cohost_rule = (
+                f"- Credit your co-host(s) on a plain final line, e.g. \"with {names} at {chan}\" "
+                f"or \"{names}, {chan}\" — placed after the link. If HOST INPUT gives an exact "
+                "credit line, use that verbatim instead. Don't invent additional collaborators.\n")
         return (
             "\n\n# THIS IS YOUR OWN VIDEO — host point of view\n"
             f"'{chan}' is YOUR own channel/show — you are the host, NOT a viewer who found someone "
@@ -457,6 +634,7 @@ def ownership_directive(summ: dict, profile: dict) -> str:
             "guest.\n"
             "- Close by warmly and a little humbly inviting people to watch your episode, with a "
             "genuine reason it's worth it (a sharp segment, the guest's humor) — not a dry citation.\n"
+            + cohost_rule +
             "- Never invent or guess a social handle, and never output a placeholder like @null or "
             "@handle. If you don't know someone's handle, use their plain name.")
     return (
@@ -548,7 +726,9 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
                    choices=["auto", "subs", "whisper", "elevenlabs"], default="auto",
                    help="Transcript source. auto = captions -> whisper (default)")
     p.add_argument("--whisper-model", default="turbo", help="Whisper model")
-    p.add_argument("--language", default=None, help="Language hint for Whisper")
+    p.add_argument("--language", default=None,
+                   help="Source language override (ISO code, e.g. ko) for caption "
+                        "selection + Whisper. Default: auto-detect from the video.")
     p.add_argument("--transcript-file", default=None,
                    help="Use an existing transcript (.txt/.srt/.vtt), skip fetching")
     p.add_argument("--profile", default=None,
@@ -557,6 +737,18 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
                    help="Generate only one platform")
     p.add_argument("--lang", choices=["en", "ko", "both"], default=None,
                    help="Output language(s). Default: from profile.languages, else en")
+    p.add_argument("--note", default=None,
+                   help="Extra host note to weave in near the end, e.g. a "
+                        "next-episode teaser (things the video itself can't tell us)")
+    p.add_argument("--comments", type=int, default=0, metavar="N",
+                   help="Fetch N top comments as audience-signal context (0 = off)")
+    p.add_argument("--cohosts", default=None,
+                   help="Override profile.cohosts credit for this run, e.g. 'JB, JC'")
+    p.add_argument("--interview", action="store_true",
+                   help="Phase 1: ask you tailored questions (writes out/<id>/interview.md); "
+                        "fill the answers and re-run to write the post from them")
+    p.add_argument("--answers-file", default=None,
+                   help="Interview answers file to inject directly (skip the phase-1 prompt)")
     p.add_argument("--out-dir", default=None,
                    help="Output dir (default: ./out/<video_id>)")
     p.add_argument("--max-transcript-words", type=int, default=16000,
@@ -592,11 +784,14 @@ def main(argv: list[str]) -> None:
 
     transcript, source = get_transcript(
         args.url, out_dir, video_id, args.transcriber,
-        args.whisper_model, args.language, args.transcript_file)
+        args.whisper_model, args.language, args.transcript_file, meta)
     (out_dir / "transcript.txt").write_text(transcript, encoding="utf-8")
     log(f"transcript source: {source}  ({len(transcript.split())} words)")
 
     profile = load_profile(args.profile)
+    if args.cohosts is not None:
+        profile = {**profile,
+                   "cohosts": [s.strip() for s in args.cohosts.split(",") if s.strip()]}
     values = build_values(summ, profile, transcript, args.max_transcript_words)
     # The system prompt refers to {{TITLE}}/{{TRANSCRIPT}}/... as named concepts that
     # the task prompt delivers — so only the concrete PROFILE is substituted here.
@@ -613,11 +808,46 @@ def main(argv: list[str]) -> None:
     # build (platform, lang, task) jobs
     own_note = ownership_directive(summ, profile)
     log(f"video ownership: {'OWN (host POV)' if is_own_video(summ, profile) else 'other'}")
+    note_directive = ""
+    if args.note:
+        note_directive = (
+            "\n\n# HOST NOTE TO INCLUDE\n"
+            "Weave the following note in near the end of the post (just before the link), "
+            "in the post's language and voice. Keep its meaning exactly; don't expand it "
+            "or add claims to it:\n" + args.note)
+    comments = fetch_comments(args.url, out_dir, args.comments) if args.comments > 0 else []
+    com_note = comments_directive(comments)
+    own = is_own_video(summ, profile)
+
+    # --- interview: ask the poster for what the video can't tell us ---
+    host_input = ""
+    if args.answers_file:
+        host_input = host_input_directive(parse_answers(Path(args.answers_file).expanduser()))
+    elif args.interview:
+        ipath = out_dir / "interview.md"
+        qa = parse_answers(ipath) if ipath.exists() else []
+        if any(a.strip() for _, a in qa):
+            host_input = host_input_directive(qa)
+            log(f"interview: using {sum(1 for _, a in qa if a.strip())} answers from {ipath.name}")
+        else:
+            if not ipath.exists():
+                qlang = "ko" if "ko" in langs else "en"
+                log("interview: generating questions ...")
+                qtext = generate_questions(summ, transcript, comments, own,
+                                           args.agent, args.model, out_dir, qlang, profile)
+                write_interview_file(ipath, qtext, args.url)
+            print(f"\n\033[1m인터뷰 질문을 작성했습니다:\033[0m {ipath}")
+            print("답을 채운 뒤 같은 명령을 다시 실행하세요 (모르는 항목은 비워두면 [TODO]로 남깁니다).")
+            print(f"\n{(ipath).read_text(encoding='utf-8')}")
+            return
+
     jobs: list[tuple[str, str, str]] = []
     base = {"x": fill(x_tmpl, values), "linkedin": fill(li_tmpl, values)}
     for platform in platforms:
         for lang in langs:
-            task = base[platform] + own_note + lang_directive(lang, platform)
+            task = (base[platform] + own_note + note_directive + com_note
+                    + voice_directive(platform, lang) + host_input
+                    + lang_directive(lang, platform))
             jobs.append((platform, lang, task))
             (out_dir / f"generation_{platform}_{lang}_task.txt").write_text(
                 task, encoding="utf-8")
