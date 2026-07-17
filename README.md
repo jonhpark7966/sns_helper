@@ -18,6 +18,22 @@ Each post is engineered (via a multi-agent prompt-design pass) to deliver four t
 3. **Your own take** — first person, in the voice from `profile.json`.
 4. **A shoutout** — credit + link to the video (placed last on X, where links suppress reach).
 
+## Two sides of this repo
+
+- **The generator** (`sns_helper.py`, `prompts/`, `voice/`) — this README. YouTube → posts.
+- **The LinkedIn voice loop** (`linkedin_posts/`, `.claude/commands/`) — the ground truth
+  and the feedback cycle behind the voice:
+  - `linkedin_posts/tools/linkedin_download.py --new` archives your real published posts
+    (`/archive-posts`). These are the voice's source of truth.
+  - `linkedin_posts/IMPROVE_PROMPT.md` — a paste-into-any-LLM "write in my voice" prompt with
+    a post-type taxonomy (episode / recap / explainer / announce / reflection / quick take)
+    and the SCENE/PEOPLE/CONCRETE elicitation. `/write-post` drives it.
+  - `/post-feedback` diffs a published post against its draft and updates `IMPROVE_PROMPT.md`.
+  - `CLAUDE.md` is the agent guide tying both sides together.
+
+The generator's `voice/linkedin_ko.md` is a curated subset of that archive; `--interview`
+is the automated form of the same "ask me the specifics, don't invent" discipline.
+
 ---
 
 ## Requirements
