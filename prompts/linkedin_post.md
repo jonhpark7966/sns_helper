@@ -23,6 +23,7 @@ DO THIS, IN ORDER
 THE OPENING LINE (this is 80% of the job)
 - Only the first ~140 characters show before "see more." Earn the click inside that window.
 - Lead with the claim, the tension, or the surprising specific. Plant a position or a stake in the ground.
+- For a recap / experience / your-own-video post, the strongest opener is often a concrete, funny, slightly self-deprecating SCENE or a spoken reaction — a real in-the-moment beat ("예? 15살이라고요…? 여길 어떻게 왔지"), not an informative sentence. If HOST INPUT gives you a scene or reaction, OPEN with it (in the poster's words), then flow into the substance.
 - It must be a complete, standalone thought a smart person would nod or bristle at — not a teaser that depends on the next line.
 - BANNED openers: "In this video…", "I just watched…", "Just finished watching…", "Here's the thing…", "Let's talk about…", "Ever wondered…", "What if I told you…", any rhetorical question as the first line, naming the video, or any sentence that summarizes instead of asserting.
 
@@ -34,6 +35,7 @@ THE BODY
 
 THE SHOUTOUT (near the end, before any hashtags)
 - Credit {{CHANNEL}} by name and include {{URL}} verbatim, in your own words, as a warm, genuine recommendation — like handing a friend something good, not running an ad. A little humility and one concrete reason to watch (a sharp segment, the guest's background or humor, the part that changed your mind) make it land. It should feel earned by the post above it. Use {{CHANNEL}} and {{URL}} exactly as given.
+- Put {{URL}} on its OWN line at the end (after the recommendation sentence, separated by a blank line) — not glued to a sentence with a colon.
 - NOTE: an appended "ownership" instruction may tell you this is YOUR OWN video — if so, it overrides this section: frame it as sharing your own episode and introducing your guest, not crediting someone else.
 
 HASHTAGS

@@ -85,7 +85,7 @@ shoutout + link to the source. Built for tech / AI / LLM / robotics content.
 
 ```
 youtube url  ──▶  metadata (yt-dlp)
-             ──▶  transcript (captions ▸ Whisper ▸ ElevenLabs)
+             ──▶  transcript (original-language captions ▸ English ▸ Whisper ▸ ElevenLabs)
              ──▶  agent writer (claude -p  |  codex exec)
              ──▶  x_post.txt + linkedin_post.txt
 ```
@@ -94,7 +94,16 @@ Each post is engineered to deliver four things: a hooking first line (never "In 
 video…"), insight not recap, my own take, and credit + link to the video (placed last on
 X, where links suppress reach).
 
-### Requirements
+It shares the voice ground truth with the writing workflow above: `voice/linkedin_ko.md` is a
+curated subset of the `linkedin_posts/` archive, and `--interview` is the automated form of
+§1's "ask me the specifics, don't invent" discipline (writes `out/<id>/interview.md`, injects
+your answers as authoritative HOST INPUT, leaves `[TODO]` for anything unanswered).
+
+---
+
+## Requirements
+
+Already present on this machine:
 
 | Tool | Used for | Notes |
 |------|----------|-------|
@@ -123,9 +132,11 @@ Edit **`profile.json`** so the posts sound like you — this is what powers "you
 }
 ```
 
-Extra fields the writer also reads: `take_guidance` (form a fresh opinion per video instead
-of recycling `beliefs`), `audience` (jargon level), `format_prefs`. Full field guide in
-`profile.example.json`. The writer never invents biography beyond what's here.
+Extra fields the writer also reads: `take_guidance` (tells it to form a fresh opinion each
+video instead of recycling `beliefs`), `audience` (tunes jargon level), `format_prefs`
+(e.g. "X: single punchy tweet; LinkedIn: short and sharp"), `own_channels` (host-POV
+detection for your own videos), and `cohosts` (credited with a "with … at <channel>" line
+on own-video posts).
 
 ### Usage
 
@@ -153,21 +164,58 @@ python3 sns_helper.py "<url>" --transcript-file my_notes.txt  # skip fetching en
 
 # a different voice / longer transcript window
 python3 sns_helper.py "<url>" --profile ./voices/spicy.json --max-transcript-words 16000
+
+# weave in a host note the video can't tell us (e.g. next-episode teaser)
+python3 sns_helper.py "<url>" --note "다음 편도 AI Native 얘기가 올라올 예정입니다."
+
+# audience signal from the comments; per-video co-host credit
+python3 sns_helper.py "<url>" --comments 50 --cohosts "JB, JC"
 ```
 
 ### Transcript sources (`--transcriber`)
 
 | value | behavior |
 |-------|----------|
-| `auto` *(default)* | manual captions → auto captions → Whisper fallback |
-| `subs` | captions only (manual then auto); error if none |
+| `auto` *(default)* | captions → Whisper fallback |
+| `subs` | captions only; error if none |
 | `whisper` | always local Whisper (`turbo`) on the downloaded audio |
 | `elevenlabs` | always ElevenLabs Scribe API (`ELEVENLABS_API_KEY` required) |
 
-> For *writing posts*, auto-captions are fine and fast/free — Whisper/ElevenLabs are the
-> fallback for videos with no captions at all.
+**Captions are fetched in the video's *original source language first*, then English, then
+Whisper.** The source language is auto-detected from the video's metadata (`--language ko`
+to override). For a Korean video you get the real Korean transcript (`ko-orig` = YouTube's
+original ASR track), not a machine-translated English caption — then the writer produces your
+EN/KO posts from it. Transcript text is de-duplicated and stripped to clean prose.
 
-### Output
+> For *writing posts*, auto-captions are perfectly fine and fast/free — Whisper/ElevenLabs
+> are the fallback for videos with no captions at all.
+
+---
+
+## Interview mode — write more like *you* (`--interview`)
+
+The title, transcript, description, and comments can't tell the tool the things that make a post
+yours: the scene you walked into, your real reaction, which moment stuck, who to tag (by their
+LinkedIn names, not the transcript's), who to thank, what you built. So instead of smoothing those
+gaps into generic prose (or inventing them), it **asks you**.
+
+```bash
+# phase 1 — writes out/<id>/interview.md with questions tailored to THIS video
+python3 sns_helper.py "<url>" --only linkedin --lang ko --interview
+
+# ...fill in the answers under each question (leave unknowns blank), then re-run the same command:
+python3 sns_helper.py "<url>" --only linkedin --lang ko --interview
+# (or pass answers directly: --answers-file path/to/answers.md)
+```
+
+Your answers become the **authoritative backbone** of the post (weighted above the transcript).
+Anything still unknown is left as a visible `[TODO: ...]` for you to fill — the writer never
+fabricates a name, number, or detail to paper over a gap.
+
+The tool also matches your voice from your **real published posts** in `voice/linkedin_ko.md`
+(refresh it by pasting in newer posts).
+
+## Output
 
 Everything lands in `out/<video_id>/`:
 
