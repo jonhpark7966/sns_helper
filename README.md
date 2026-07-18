@@ -94,21 +94,10 @@ Each post is engineered to deliver four things: a hooking first line (never "In 
 video…"), insight not recap, my own take, and credit + link to the video (placed last on
 X, where links suppress reach).
 
-## Two sides of this repo
-
-- **The generator** (`sns_helper.py`, `prompts/`, `voice/`) — this README. YouTube → posts.
-- **The LinkedIn voice loop** (`linkedin_posts/`, `.claude/commands/`) — the ground truth
-  and the feedback cycle behind the voice:
-  - `linkedin_posts/tools/linkedin_download.py --new` archives your real published posts
-    (`/archive-posts`). These are the voice's source of truth.
-  - `linkedin_posts/IMPROVE_PROMPT.md` — a paste-into-any-LLM "write in my voice" prompt with
-    a post-type taxonomy (episode / recap / explainer / announce / reflection / quick take)
-    and the SCENE/PEOPLE/CONCRETE elicitation. `/write-post` drives it.
-  - `/post-feedback` diffs a published post against its draft and updates `IMPROVE_PROMPT.md`.
-  - `CLAUDE.md` is the agent guide tying both sides together.
-
-The generator's `voice/linkedin_ko.md` is a curated subset of that archive; `--interview`
-is the automated form of the same "ask me the specifics, don't invent" discipline.
+It shares the voice ground truth with the writing workflow above: `voice/linkedin_ko.md` is a
+curated subset of the `linkedin_posts/` archive, and `--interview` is the automated form of
+§1's "ask me the specifics, don't invent" discipline (writes `out/<id>/interview.md`, injects
+your answers as authoritative HOST INPUT, leaves `[TODO]` for anything unanswered).
 
 ---
 
